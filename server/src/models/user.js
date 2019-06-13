@@ -13,9 +13,6 @@ module.exports = (sequelize, DataTypes) => {
     {
       hooks: {
         beforeSave: hashPasswordHook
-      },
-      instanceMethods: {
-        authenticate: checkPassword
       }
     }
   );
@@ -36,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   // パスワードのチェック
-  const checkPassword = async password => {
+  User.prototype.checkPassword = async password => {
     try {
       const match = await bcrypt.compare(password, this.password);
       return match;
