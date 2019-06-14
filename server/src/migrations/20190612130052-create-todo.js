@@ -21,6 +21,7 @@ module.exports = {
         allowNull: false,
         defaultValue: false
       },
+      // 論理削除(0:通常 1:削除)
       statusCode: {
         type: "TINYINT",
         allowNull: false,

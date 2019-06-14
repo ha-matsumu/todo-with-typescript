@@ -21,6 +21,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      // 論理削除(0:通常 1:削除)
       statusCode: {
         type: "TINYINT",
         allowNull: false,
