@@ -12,7 +12,7 @@ module.exports = {
         completed: faker.random.boolean(),
         statusCode: Math.floor(Math.random() * 2),
         orderNumber: i,
-        userId: Math.floor(Math.random() * 11)
+        userId: Math.ceil(Math.random() * 10)
       });
     }
     return queryInterface.bulkInsert("Todos", demoTodos, {});
