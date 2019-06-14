@@ -25,7 +25,8 @@ module.exports = (sequelize, DataTypes) => {
   // パスワードをハッシュ化
   const hashPasswordHook = async user => {
     try {
-      const passwordHash = await bcrypt.hash(user.password, 10);
+      const saltRounds = 10;
+      const passwordHash = await bcrypt.hash(user.password, saltRounds);
       user.password = passwordHash;
     } catch (error) {
       return error;
