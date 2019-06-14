@@ -15,7 +15,6 @@ module.exports = {
         userId: Math.floor(Math.random() * 11)
       });
     }
-    console.log(demoTodos);
     return queryInterface.bulkInsert("Todos", demoTodos, {});
   },
 

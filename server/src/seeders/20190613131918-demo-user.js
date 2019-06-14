@@ -12,7 +12,6 @@ module.exports = {
         password: faker.internet.password()
       });
     }
-    console.log(demoUsers);
     return queryInterface.bulkInsert("Users", demoUsers, {});
   },
 
