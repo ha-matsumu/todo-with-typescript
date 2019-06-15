@@ -23,9 +23,9 @@ module.exports = {
       },
       // 論理削除(0:通常 1:削除)
       statusCode: {
-        type: "TINYINT",
+        type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: 0
+        defaultValue: false
       },
       createdAt: {
         allowNull: false,

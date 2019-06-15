@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
-      statusCode: DataTypes.INTEGER
+      statusCode: DataTypes.BOOLEAN
     },
     {
       hooks: {
