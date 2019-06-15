@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "migrate": "node_modules/.bin/sequelize db:migrate",
+    "seed": "node_modules/.bin/sequelize db:seed:all",
     "test": "NODE_ENV=test mocha test/src"
   },
   "keywords": [],
