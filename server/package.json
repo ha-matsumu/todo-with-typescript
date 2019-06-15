@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "migrate": "node_modules/.bin/sequelize db:migrate",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_ENV=test mocha test/src"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,8 @@
     "sequelize-cli": "^5.5.0"
   },
   "devDependencies": {
-    "faker": "^4.1.0"
+    "faker": "^4.1.0",
+    "mocha": "^6.1.4",
+    "power-assert": "^1.6.1"
   }
 }
