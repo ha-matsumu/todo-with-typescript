@@ -1,5 +1,6 @@
 const assert = require("power-assert");
 const faker = require("faker");
+const bcrypt = require("bcrypt");
 const { User, sequelize } = require("../../../src/models");
 
 describe("User model", () => {
@@ -18,7 +19,7 @@ describe("User model", () => {
       await sequelize.truncate();
     });
 
-    it("入力したパスワードとDBに格納されているパスワードの比較", async () => {
+    it("パスワードがハッシュ化されて保存されているか確認", async () => {
       const user = await User.findOne({
         where: { email: demoUser.email }
       });
