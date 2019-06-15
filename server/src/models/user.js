@@ -12,7 +12,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        beforeSave: hashPasswordHook
+        // パスワードのハッシュ化
+        beforeSave: async user => {
+          try {
+            const saltRounds = 10;
+            const passwordHash = await bcrypt.hash(user.password, saltRounds);
+            user.password = passwordHash;
+          } catch (error) {
+            return error;
+          }
+        }
       }
     }
   );
@@ -22,19 +31,8 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  // パスワードをハッシュ化
-  const hashPasswordHook = async user => {
-    try {
-      const saltRounds = 10;
-      const passwordHash = await bcrypt.hash(user.password, saltRounds);
-      user.password = passwordHash;
-    } catch (error) {
-      return error;
-    }
-  };
-
-  // パスワードのチェック
-  User.prototype.checkPassword = async password => {
+  // パスワード認証
+  User.prototype.authenticate = async function(password) {
     try {
       const match = await bcrypt.compare(password, this.password);
       return match;
