@@ -24,7 +24,6 @@
   "devDependencies": {
     "faker": "^4.1.0",
     "mocha": "^6.1.4",
-    "morgan": "^1.9.1",
     "nodemon": "^1.19.1",
     "power-assert": "^1.6.1",
     "supertest": "^4.0.2"
