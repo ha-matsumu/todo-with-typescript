@@ -6,11 +6,10 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       desc: DataTypes.STRING,
       completed: DataTypes.BOOLEAN,
-      statusCode: DataTypes.BOOLEAN,
       orderNumber: DataTypes.INTEGER,
       userId: DataTypes.INTEGER
     },
-    {}
+    { paranoid: true }
   );
   Todo.associate = function(models) {
     Todo.belongsTo(models.User);
