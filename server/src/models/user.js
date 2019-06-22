@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
-      password: DataTypes.STRING,
-      statusCode: DataTypes.BOOLEAN
+      password: DataTypes.STRING
     },
     {
+      paranoid: true,
       hooks: {
         // パスワードのハッシュ化
         beforeSave: async user => {
