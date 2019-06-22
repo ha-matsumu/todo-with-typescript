@@ -9,6 +9,6 @@ router.post("/signup", userController.signup);
 router.post("/signin", userController.signin);
 
 // 退会
-router.delete("/deactivate", userController.deactivate);
+router.delete("/", userController.deactivate);
 
 module.exports = router;
