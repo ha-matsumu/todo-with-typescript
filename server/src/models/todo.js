@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       orderNumber: DataTypes.INTEGER,
       userId: DataTypes.INTEGER
     },
-    {}
+    { paranoid: true }
   );
   Todo.associate = function(models) {
     Todo.belongsTo(models.User);
