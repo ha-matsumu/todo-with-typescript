@@ -5,8 +5,8 @@ const todoRouter = require("./routes/todo.router");
 
 const app = express();
 
-app.use(bodyparser.urlencoded({ extended: true }));
-app.use(bodyparser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/user", userRouter);
 
