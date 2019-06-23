@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyparser = require("body-parser");
 const userRouter = require("./routes/user.router");
 const todoRouter = require("./routes/todo.router");
 const error = require("./middlewares/errorHelper");
