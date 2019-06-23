@@ -1,6 +1,6 @@
 const assert = require("power-assert");
 const faker = require("faker");
-const { User, sequelize } = require("../../../src/models");
+const { sequelize } = require("../../../src/models");
 const requestHelper = require("../requestHelper");
 
 describe("POST /users", () => {
