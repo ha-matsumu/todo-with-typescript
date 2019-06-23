@@ -1,6 +1,32 @@
+const { User, sequelize } = require("../models");
+const boom = require("boom");
+
 const userController = {
-  signup(req, res) {
-    res.status(200).send("signup process");
+  async signup(req, res, next) {
+    const transaction = await sequelize.transaction();
+    try {
+      // inset into users(name, email, pasword)
+      // values(req.body.name, req.body.email, req.body.password);
+      const user = await User.create(
+        {
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password
+        },
+        { transaction }
+      );
+      await transaction.commit();
+      res.status(200).json(user);
+    } catch (error) {
+      await transaction.rollback();
+
+      if (error.original.errno === 1062) {
+        error = boom.badRequest(
+          "The email you typed has already been recorded."
+        );
+      }
+      next(error);
+    }
   },
 
   signin(req, res) {
@@ -8,7 +34,7 @@ const userController = {
   },
 
   deactivate(req, res) {
-    res.status(200).send("deactivate process")
+    res.status(200).send("deactivate process");
   }
 };
 
