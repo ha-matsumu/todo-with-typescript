@@ -20,12 +20,15 @@ const userController = {
     } catch (error) {
       await transaction.rollback();
 
+      // 404 Not Found
       if (error.original.errno === 1062) {
         error = boom.badRequest(
           "The email you typed has already been recorded."
         );
       }
-      next(error);
+
+      // 500 Internal Server Error
+      next(boom.boomify(error));
     }
   },
 
