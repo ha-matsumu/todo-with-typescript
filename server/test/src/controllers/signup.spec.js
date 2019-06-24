@@ -57,7 +57,7 @@ describe("POST /users", () => {
       .set("Accept", "application/json");
 
     assert.equal(body.error, "Internal Server Error");
-    assert.equal(body.message, "An internal server error occurred");
+    assert.equal(body.message, "Sorry, our service is temporaily unavailable.");
     assert.equal(statusCode, 500);
   });
 });
