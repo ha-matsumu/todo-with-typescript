@@ -5,7 +5,7 @@ const userController = {
   async signup(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      // inset into users(name, email, pasword)
+      // insert into users(name, email, pasword)
       // values(req.body.name, req.body.email, req.body.password);
       const user = await User.create(
         {
