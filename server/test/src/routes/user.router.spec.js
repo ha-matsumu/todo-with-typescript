@@ -1,15 +1,5 @@
 const requestHelper = require("../requestHelper");
 
-describe("POST /user/signup", () => {
-  it("リクエストの挙動確認 200", () => {
-    return requestHelper.requestAPI("post", "/users", 200);
-  });
-
-  it("リクエストの挙動確認 404", () => {
-    return requestHelper.requestAPI("post", "/user", 404);
-  });
-});
-
 describe("POST /user/signin", () => {
   it("リクエストの挙動確認 200", () => {
     return requestHelper.requestAPI("post", "/users/login", 200);
