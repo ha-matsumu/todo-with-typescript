@@ -21,7 +21,7 @@ const userController = {
       await transaction.rollback();
 
       if (error.original.errno === 1062) {
-        // 404 Not Found
+        // 400 Bad Request
         error = boom.badRequest(
           "The email you typed has already been recorded."
         );
