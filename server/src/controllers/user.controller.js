@@ -49,8 +49,7 @@ const userController = {
       const isMatch = await user.authenticate(req.body.password);
       if (!isMatch) {
         // 400 Bad Request
-        next(boom.badRequest("Authentication failed. Wrong password."));
-        return;
+        return next(boom.badRequest("Authentication failed. Wrong password."));
       }
 
       const token = jwt.sign(user.dataValues, key.tokenKey, {
