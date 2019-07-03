@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const boom = require("boom");
-const key = require("../key");
+require("dotenv").config()
 
 module.exports = {
   verifyToken: (req, res) => {
@@ -11,7 +11,7 @@ module.exports = {
       return boom.forbidden("No token provided.");
     }
 
-    return jwt.verify(token, key.tokenKey, (err, decoded) => {
+    return jwt.verify(token, process.env.AUTH_SECRET_KEY, (err, decoded) => {
       if (err) {
         return boom.unauthorized("Invalid token.");
       }
