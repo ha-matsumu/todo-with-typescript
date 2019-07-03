@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
+require("dotenv").config()
 const { User, sequelize } = require("../models");
 const boom = require("boom");
-const key = require("../key");
 
 const userController = {
   async signup(req, res, next) {
@@ -52,7 +52,7 @@ const userController = {
         return next(boom.badRequest("Authentication failed. Wrong password."));
       }
 
-      const token = jwt.sign(user.dataValues, key.tokenKey, {
+      const token = jwt.sign(user.dataValues, process.env.AUTH_SECRET_KEY, {
         expiresIn: "24h"
       });
       res.status(200).json({
