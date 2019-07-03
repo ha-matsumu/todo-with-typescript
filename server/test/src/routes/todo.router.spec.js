@@ -30,7 +30,7 @@ describe("Test of todo.router.js", () => {
       const token = body.token;
       return requestHelper
         .requestAPI("get", "/todos", 200)
-        .set("x-access-token", token);
+        .set("authorization", `Bearer ${token}`);
     });
 
     it("リクエストの挙動確認 403", () => {
@@ -52,7 +52,7 @@ describe("Test of todo.router.js", () => {
       const token = body.token;
       return requestHelper
         .requestAPI("post", "/todos", 200)
-        .set("x-access-token", token);
+        .set("authorization", `Bearer ${token}`);
     });
 
     it("リクエストの挙動確認 403", () => {
@@ -74,7 +74,7 @@ describe("Test of todo.router.js", () => {
       const token = body.token;
       return requestHelper
         .requestAPI("put", "/todos/1", 200)
-        .set("x-access-token", token);
+        .set("authorization", `Bearer ${token}`);
     });
 
     it("リクエストの挙動確認 403", () => {
@@ -96,7 +96,7 @@ describe("Test of todo.router.js", () => {
       const token = body.token;
       return requestHelper
         .requestAPI("delete", "/todos/1", 200)
-        .set("x-access-token", token);
+        .set("authorization", `Bearer ${token}`);
     });
 
     it("リクエストの挙動確認 403", () => {

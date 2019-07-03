@@ -31,7 +31,7 @@ describe("Test of authHelper.js", () => {
 
     const token = body.token;
     const req = httpMocks.createRequest({
-      headers: { "x-access-token": token }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
     const res = httpMocks.createResponse();
@@ -42,7 +42,7 @@ describe("Test of authHelper.js", () => {
 
   it("トークン認証の動作確認 401", async () => {
     const req = httpMocks.createRequest({
-      headers: { "x-access-token": "token" }
+      headers: { Authorization: `Bearer token` }
     });
 
     const res = httpMocks.createResponse();

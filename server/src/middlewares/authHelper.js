@@ -1,15 +1,15 @@
 const jwt = require("jsonwebtoken");
 const boom = require("boom");
-require("dotenv").config()
+require("dotenv").config();
 
 module.exports = {
   verifyToken: (req, res) => {
-    const token =
-      req.body.token || req.query.token || req.headers["x-access-token"];
-
-    if (!token) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
       return boom.forbidden("No token provided.");
     }
+
+    const token = authHeader.split(" ")[1];
 
     return jwt.verify(token, process.env.AUTH_SECRET_KEY, (err, decoded) => {
       if (err) {
