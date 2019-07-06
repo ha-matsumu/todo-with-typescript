@@ -2,21 +2,22 @@ const jwt = require("jsonwebtoken");
 const boom = require("boom");
 require("dotenv").config();
 
-module.exports = {
-  verifyToken: (req, res) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader) {
-      return boom.forbidden("No token provided.");
-    }
-
-    const token = authHeader.split(" ")[1];
-
-    return jwt.verify(token, process.env.AUTH_SECRET_KEY, (err, decoded) => {
-      if (err) {
-        return boom.unauthorized("Invalid token.");
-      }
-      req.decoded = decoded;
-      return { statusCode: 200 };
-    });
+module.exports = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    const error = boom.forbidden("No token provided.");
+    return next(error);
   }
+
+  const token = authHeader.split(" ")[1];
+
+  jwt.verify(token, process.env.AUTH_SECRET_KEY, (err, decoded) => {
+    if (err) {
+      const error = boom.unauthorized("Invalid token.");
+      return next(error);
+    }
+    req.decoded = decoded;
+    req.statusCode = 200;
+    next();
+  });
 };

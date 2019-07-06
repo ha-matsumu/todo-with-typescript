@@ -2,7 +2,7 @@ const assert = require("power-assert");
 const faker = require("faker");
 const httpMocks = require("node-mocks-http");
 const { sequelize } = require("../../../src/models");
-const authHelper = require("../../../src/middlewares/authHelper");
+const verifyToken = require("../../../src/middlewares/authHelper");
 const requestHelper = require("../requestHelper");
 
 describe("Test of authHelper.js", () => {
@@ -33,36 +33,37 @@ describe("Test of authHelper.js", () => {
     const req = httpMocks.createRequest({
       headers: { Authorization: `Bearer ${token}` }
     });
-
     const res = httpMocks.createResponse();
-    const verifiedToken = authHelper.verifyToken(req, res);
+    verifyToken(req, res, () => {});
 
-    assert.equal(verifiedToken.statusCode, 200);
+    assert.equal(req.statusCode, 200);
   });
 
-  it("トークン認証の動作確認 401", async () => {
+  it("トークン認証の動作確認 401", done => {
     const req = httpMocks.createRequest({
       headers: { Authorization: `Bearer token` }
     });
-
     const res = httpMocks.createResponse();
-    const verifiedToken = authHelper.verifyToken(req, res);
-    const payload = verifiedToken.output.payload;
+    verifyToken(req, res, error => {
+      const payload = error.output.payload;
 
-    assert.equal(payload.error, "Unauthorized");
-    assert.equal(payload.message, "Invalid token.");
-    assert.equal(payload.statusCode, 401);
+      assert.equal(payload.error, "Unauthorized");
+      assert.equal(payload.message, "Invalid token.");
+      assert.equal(payload.statusCode, 401);
+      done();
+    });
   });
 
-  it("トークン認証の動作確認 403", async () => {
+  it("トークン認証の動作確認 403", done => {
     const req = httpMocks.createRequest();
-
     const res = httpMocks.createResponse();
-    const verifiedToken = authHelper.verifyToken(req, res);
-    const payload = verifiedToken.output.payload;
+    verifyToken(req, res, error => {
+      const payload = error.output.payload;
 
-    assert.equal(payload.error, "Forbidden");
-    assert.equal(payload.message, "No token provided.");
-    assert.equal(payload.statusCode, 403);
+      assert.equal(payload.error, "Forbidden");
+      assert.equal(payload.message, "No token provided.");
+      assert.equal(payload.statusCode, 403);
+      done();
+    });
   });
 });
