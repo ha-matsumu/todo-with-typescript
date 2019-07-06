@@ -3,7 +3,7 @@ const faker = require("faker");
 const httpMocks = require("node-mocks-http");
 const { sequelize } = require("../../../src/models");
 const verifyToken = require("../../../src/middlewares/authHelper");
-const requestHelper = require("../requestHelper");
+const authHelper = require("../../helper/authHelper");
 
 describe("Test of authHelper.js", () => {
   const demoUser = {
@@ -13,10 +13,7 @@ describe("Test of authHelper.js", () => {
   };
 
   before(async () => {
-    await requestHelper
-      .requestAPI("post", "/users", 200)
-      .set("Accept", "application/json")
-      .send(demoUser);
+    await authHelper.signup(demoUser);
   });
 
   after(async () => {
@@ -24,12 +21,7 @@ describe("Test of authHelper.js", () => {
   });
 
   it("トークン認証の動作確認 200", async () => {
-    const { body } = await requestHelper
-      .requestAPI("post", "/users/login", 200)
-      .set("Accept", "application/json")
-      .send(demoUser);
-
-    const token = body.token;
+    const token = await authHelper.getToken(demoUser);
     const req = httpMocks.createRequest({
       headers: { Authorization: `Bearer ${token}` }
     });

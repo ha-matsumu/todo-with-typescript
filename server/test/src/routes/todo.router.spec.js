@@ -1,6 +1,7 @@
 const faker = require("faker");
 const { sequelize } = require("../../../src/models");
-const requestHelper = require("../requestHelper");
+const authHelper = require("../../helper/authHelper");
+const requestHelper = require("../../helper/requestHelper");
 
 describe("Test of todo.router.js", () => {
   const demoUser = {
@@ -10,10 +11,7 @@ describe("Test of todo.router.js", () => {
   };
 
   before(async () => {
-    await requestHelper
-      .requestAPI("post", "/users", 200)
-      .set("Accept", "application/json")
-      .send(demoUser);
+    await authHelper.signup(demoUser);
   });
 
   after(async () => {
@@ -22,12 +20,7 @@ describe("Test of todo.router.js", () => {
 
   describe("GET /todos/", () => {
     it("リクエストの挙動確認 200", async () => {
-      const { body } = await requestHelper
-        .requestAPI("post", "/users/login", 200)
-        .set("Accept", "application/json")
-        .send(demoUser);
-
-      const token = body.token;
+      const token = await authHelper.getToken(demoUser);
       return requestHelper
         .requestAPI("get", "/todos", 200)
         .set("authorization", `Bearer ${token}`);
@@ -44,12 +37,7 @@ describe("Test of todo.router.js", () => {
 
   describe("POST /todos/", () => {
     it("リクエストの挙動確認 200", async () => {
-      const { body } = await requestHelper
-        .requestAPI("post", "/users/login", 200)
-        .set("Accept", "application/json")
-        .send(demoUser);
-
-      const token = body.token;
+      const token = await authHelper.getToken(demoUser);
       return requestHelper
         .requestAPI("post", "/todos", 200)
         .set("authorization", `Bearer ${token}`);
@@ -66,12 +54,7 @@ describe("Test of todo.router.js", () => {
 
   describe("PUT /todos/:id", () => {
     it("リクエストの挙動確認 200", async () => {
-      const { body } = await requestHelper
-        .requestAPI("post", "/users/login", 200)
-        .set("Accept", "application/json")
-        .send(demoUser);
-
-      const token = body.token;
+      const token = await authHelper.getToken(demoUser);
       return requestHelper
         .requestAPI("put", "/todos/1", 200)
         .set("authorization", `Bearer ${token}`);
@@ -88,12 +71,7 @@ describe("Test of todo.router.js", () => {
 
   describe("DELETE /todos/", () => {
     it("リクエストの挙動確認 200", async () => {
-      const { body } = await requestHelper
-        .requestAPI("post", "/users/login", 200)
-        .set("Accept", "application/json")
-        .send(demoUser);
-
-      const token = body.token;
+      const token = await authHelper.getToken(demoUser);
       return requestHelper
         .requestAPI("delete", "/todos/1", 200)
         .set("authorization", `Bearer ${token}`);
