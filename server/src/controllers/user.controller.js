@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+require("dotenv").config()
 const { User, sequelize } = require("../models");
 const boom = require("boom");
 
@@ -36,8 +38,40 @@ const userController = {
     }
   },
 
-  signin(req, res) {
-    res.status(200).send("signin process");
+  async signin(req, res, next) {
+    try {
+      const user = await User.findOne({
+        where: {
+          email: req.body.email
+        }
+      });
+
+      const isMatch = await user.authenticate(req.body.password);
+      if (!isMatch) {
+        // 400 Bad Request
+        return next(boom.badRequest("Authentication failed. Wrong password."));
+      }
+
+      const token = jwt.sign(user.dataValues, process.env.AUTH_SECRET_KEY, {
+        expiresIn: "24h"
+      });
+      res.status(200).json({
+        message: "Authentication successfully finished.",
+        token: token
+      });
+    } catch (error) {
+      if (error instanceof TypeError) {
+        // 400 Bad Request
+        error = boom.badRequest("Authentication failed. User not found.");
+      } else {
+        // 500 Internal Server Error
+        error = boom.boomify(error);
+        error.output.payload.message =
+          "Sorry, our service is temporaily unavailable.";
+      }
+
+      next(error);
+    }
   },
 
   deactivate(req, res) {
