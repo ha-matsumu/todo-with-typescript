@@ -5,9 +5,9 @@ const authHelper = require("../../helper/authHelper");
 const requestHelper = require("../../helper/requestHelper");
 
 describe("Delete /users/:id", () => {
-  after(async () => {
-    await sequelize.truncate();
-  });
+  // after(async () => {
+  //   await sequelize.truncate();
+  // });
 
   it("退会機能の確認 200", async () => {
     const demoUser = {
@@ -25,6 +25,28 @@ describe("Delete /users/:id", () => {
 
     assert.equal(body.message, "The membership withdrawal was completed.");
     assert.equal(statusCode, 200);
+  });
+
+  it("退会機能の確認 400", async () => {
+    const demoUsers = [];
+    for (let i = 0; i < 2; i++) {
+      demoUsers.push({
+        name: faker.internet.userName(),
+        email: faker.internet.email(),
+        password: faker.internet.password()
+      });
+      await authHelper.signup(demoUsers[i]);
+    }
+    const token = await authHelper.getToken(demoUsers[0]);
+
+    const signinUserID = await User.max("id");
+    const { body, statusCode } = await requestHelper
+      .requestAPI("delete", `/users/${signinUserID}`, 400)
+      .set("authorization", `Bearer ${token}`);
+
+    assert.equal(body.error, "Bad Request");
+    assert.equal(body.message, "A bad request was sent.");
+    assert.equal(statusCode, 400);
   });
 
   it("退会機能の確認 401", async () => {
@@ -55,23 +77,5 @@ describe("Delete /users/:id", () => {
     assert.equal(body.error, "Not Found");
     assert.equal(body.message, "This page could not be found.");
     assert.equal(statusCode, 404);
-  });
-
-  it("退会機能の確認 500", async () => {
-    const demoUser = {
-      name: faker.internet.userName(),
-      email: faker.internet.email(),
-      password: faker.internet.password()
-    };
-    await authHelper.signup(demoUser);
-    const token = await authHelper.getToken(demoUser);
-
-    const { body, statusCode } = await requestHelper
-      .requestAPI("delete", "/users/1", 500)
-      .set("authorization", `Bearer ${token}`);
-
-    assert.equal(body.error, "Internal Server Error");
-    assert.equal(body.message, "Sorry, our service is temporaily unavailable.");
-    assert.equal(statusCode, 500);
   });
 });
