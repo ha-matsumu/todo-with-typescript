@@ -77,22 +77,24 @@ const userController = {
   async deactivate(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      if (Number(req.params.id) === req.decoded.id) {
-        const user = await User.findByPk(req.params.id);
-        await user.destroy({ transaction });
-        await transaction.commit();
-        res.status(200).json({
-          message: "The membership withdrawal was completed."
-        });
-      } else {
-        return next(boom.badRequest("A bad request was sent."));
+      if (Number(req.params.id) !== req.decoded.id) {
+        throw boom.badRequest("A bad request was sent.");
       }
+
+      const user = await User.findByPk(req.params.id);
+      await user.destroy({ transaction });
+      await transaction.commit();
+      res.status(200).json({
+        message: "The membership withdrawal was completed."
+      });
     } catch (error) {
       await transaction.rollback();
 
-      error = boom.boomify(error);
-      error.output.payload.message =
-        "Sorry, our service is temporaily unavailable.";
+      if (error instanceof TypeError) {
+        error = boom.boomify(error);
+        error.output.payload.message =
+          "Sorry, our service is temporaily unavailable.";
+      }
 
       next(error);
     }
