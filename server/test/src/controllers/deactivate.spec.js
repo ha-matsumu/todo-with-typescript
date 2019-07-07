@@ -5,9 +5,9 @@ const authHelper = require("../../helper/authHelper");
 const requestHelper = require("../../helper/requestHelper");
 
 describe("Delete /users/:id", () => {
-  // after(async () => {
-  //   await sequelize.truncate();
-  // });
+  after(async () => {
+    await sequelize.truncate();
+  });
 
   it("退会機能の確認 200", async () => {
     const demoUser = {
