@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       email: DataTypes.STRING,
-      password: DataTypes.STRING
+      password: DataTypes.STRING,
+      userRoleId: DataTypes.INTEGER
     },
     {
       paranoid: true,
@@ -29,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.Todo, {
       foreignKey: "userId"
     });
+    User.belongsTo(models.UserRole);
   };
 
   // パスワード認証
