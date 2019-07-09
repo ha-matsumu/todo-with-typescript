@@ -77,7 +77,10 @@ const userController = {
   async deactivate(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      if (Number(req.params.id) !== req.decoded.id) {
+      if (
+        req.decoded.UserRoleId !== 1 &&
+        Number(req.params.id) !== req.decoded.id
+      ) {
         throw boom.badRequest("A bad request was sent.");
       }
 

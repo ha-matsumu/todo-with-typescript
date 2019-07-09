@@ -9,11 +9,31 @@ describe("Delete /users/:id", () => {
     await sequelize.truncate();
   });
 
-  it("退会機能の確認 200", async () => {
+  it("退会機能の確認(管理者の場合) 200", async () => {
     const demoUser = {
       name: faker.internet.userName(),
       email: faker.internet.email(),
-      password: faker.internet.password()
+      password: faker.internet.password(),
+      UserRoleId: 1
+    };
+    await authHelper.signup(demoUser);
+    const token = await authHelper.getToken(demoUser);
+
+    const signinUserID = await User.max("id");
+    const { body, statusCode } = await requestHelper
+      .requestAPI("delete", `/users/${signinUserID}`, 200)
+      .set("authorization", `Bearer ${token}`);
+
+    assert.equal(body.message, "The membership withdrawal was completed.");
+    assert.equal(statusCode, 200);
+  });
+
+  it("退会機能の確認(一般ユーザーの場合) 200", async () => {
+    const demoUser = {
+      name: faker.internet.userName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      UserRoleId: 2
     };
     await authHelper.signup(demoUser);
     const token = await authHelper.getToken(demoUser);
@@ -33,7 +53,8 @@ describe("Delete /users/:id", () => {
       demoUsers.push({
         name: faker.internet.userName(),
         email: faker.internet.email(),
-        password: faker.internet.password()
+        password: faker.internet.password(),
+        UserRoleId: 2
       });
       await authHelper.signup(demoUsers[i]);
     }
