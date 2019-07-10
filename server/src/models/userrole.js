@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const UserRole = sequelize.define(
     "UserRole",
     {
-      privilege: DataTypes.STRING
+      role: DataTypes.STRING
     },
     {}
   );

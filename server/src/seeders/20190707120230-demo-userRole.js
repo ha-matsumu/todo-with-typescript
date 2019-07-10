@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    const demoUserRoles = [{ privilege: "admin" }, { privilege: "user" }];
+    const demoUserRoles = [{ role: "admin" }, { role: "user" }];
     return queryInterface.bulkInsert("UserRoles", demoUserRoles, {});
   },
 
