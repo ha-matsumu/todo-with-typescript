@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken");
+const boom = require("boom");
 require("dotenv").config();
 const { User, sequelize } = require("../models");
-const boom = require("boom");
+const isAdmin = require("../middlewares/adminHelper");
 
 const userController = {
   async signup(req, res, next) {
@@ -13,7 +14,8 @@ const userController = {
         {
           name: req.body.name,
           email: req.body.email,
-          password: req.body.password
+          password: req.body.password,
+          userRoleId: req.body.userRoleId
         },
         { transaction }
       );
@@ -78,7 +80,7 @@ const userController = {
     const transaction = await sequelize.transaction();
     try {
       if (
-        req.decoded.UserRoleId !== 1 &&
+        !isAdmin(req.decoded.UserRoleId) &&
         Number(req.params.id) !== req.decoded.id
       ) {
         throw boom.badRequest("A bad request was sent.");

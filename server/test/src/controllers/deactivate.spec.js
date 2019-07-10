@@ -10,14 +10,17 @@ describe("Delete /users/:id", () => {
   });
 
   it("退会機能の確認(管理者の場合) 200", async () => {
-    const demoUser = {
-      name: faker.internet.userName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      UserRoleId: 1
-    };
-    await authHelper.signup(demoUser);
-    const token = await authHelper.getToken(demoUser);
+    const demoUsers = [];
+    for (let i = 0; i < 2; i++) {
+      demoUsers.push({
+        name: faker.internet.userName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        userRoleId: 1
+      });
+      await authHelper.signup(demoUsers[i]);
+    }
+    const token = await authHelper.getToken(demoUsers[0]);
 
     const signinUserID = await User.max("id");
     const { body, statusCode } = await requestHelper
@@ -33,7 +36,7 @@ describe("Delete /users/:id", () => {
       name: faker.internet.userName(),
       email: faker.internet.email(),
       password: faker.internet.password(),
-      UserRoleId: 2
+      userRoleId: 2
     };
     await authHelper.signup(demoUser);
     const token = await authHelper.getToken(demoUser);
@@ -54,7 +57,7 @@ describe("Delete /users/:id", () => {
         name: faker.internet.userName(),
         email: faker.internet.email(),
         password: faker.internet.password(),
-        UserRoleId: 2
+        userRoleId: 2
       });
       await authHelper.signup(demoUsers[i]);
     }
