@@ -80,7 +80,7 @@ const userController = {
     const transaction = await sequelize.transaction();
     try {
       if (
-        !isAdmin(req.decoded.UserRoleId) &&
+        !User.isAdmin(req.decoded.UserRoleId) &&
         Number(req.params.id) !== req.decoded.id
       ) {
         throw boom.badRequest("A bad request was sent.");

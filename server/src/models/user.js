@@ -43,5 +43,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
 
+  // 管理者権限のチェック
+  User.USER_ROLE_ADMIN_ID = 1;
+  User.isAdmin = function(userRoleId) {
+    if (userRoleId === this.USER_ROLE_ADMIN_ID) {
+      return true;
+    }
+    return false;
+  };
+
   return User;
 };
