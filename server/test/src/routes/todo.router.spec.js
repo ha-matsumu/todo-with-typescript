@@ -18,23 +18,6 @@ describe("Test of todo.router.js", () => {
     await sequelize.truncate();
   });
 
-  describe("GET /todos/", () => {
-    it("リクエストの挙動確認 200", async () => {
-      const token = await authHelper.getToken(demoUser);
-      return requestHelper
-        .requestAPI("get", "/todos", 200)
-        .set("authorization", `Bearer ${token}`);
-    });
-
-    it("リクエストの挙動確認 403", () => {
-      return requestHelper.requestAPI("get", "/todos", 403);
-    });
-
-    it("リクエストの挙動確認 404", () => {
-      return requestHelper.requestAPI("get", "/todo", 404);
-    });
-  });
-
   describe("PUT /todos/:id", () => {
     it("リクエストの挙動確認 200", async () => {
       const token = await authHelper.getToken(demoUser);
