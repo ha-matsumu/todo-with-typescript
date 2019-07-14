@@ -1,10 +1,32 @@
 const boom = require("boom");
-const { Todo, sequelize } = require("../models");
+const { User, Todo, sequelize } = require("../models");
 
 const todoContrller = {
   // 各リクエストに対して実行されるメソッドを定義
-  getTodos(req, res) {
-    res.status(200).send("get todos from DB");
+  async getTodos(req, res, next) {
+    try {
+      let todos;
+      if (User.isAdmin(req.decoded.UserRoleId)) {
+        todos = await Todo.findAll({
+          order: [["orderNumber", "ASC"]]
+        });
+      } else {
+        todos = await Todo.findAll({
+          where: {
+            userId: req.decoded.id
+          },
+          order: [["orderNumber", "ASC"]]
+        });
+      }
+      res.status(200).json(todos);
+    } catch (error) {
+      // 500 Internal Server Error
+      error = boom.boomify(error);
+      error.output.payload.message =
+        "Sorry, our service is temporaily unavailable.";
+
+      next(error);
+    }
   },
 
   async postTodo(req, res, next) {
