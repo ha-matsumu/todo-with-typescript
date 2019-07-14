@@ -47,6 +47,7 @@ describe("GET /todos", () => {
       .requestAPI("get", "/todos", 200)
       .set("authorization", `Bearer ${token}`);
 
+    assert.equal(body.length, demoTodos.length);
     body.forEach((todo, index) => {
       assert.equal(typeof todo.id, "number");
       assert.equal(todo.title, demoTodos[index].title);
@@ -70,6 +71,7 @@ describe("GET /todos", () => {
       return demoTodo.userId === signinUserID;
     });
 
+    assert.equal(body.length, todosOfLoginUser.length);
     body.forEach((todo, index) => {
       assert.equal(typeof todo.id, "number");
       assert.equal(todo.title, todosOfLoginUser[index].title);
