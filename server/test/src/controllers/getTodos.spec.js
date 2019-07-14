@@ -66,17 +66,17 @@ describe("GET /todos", () => {
       .requestAPI("get", "/todos", 200)
       .set("authorization", `Bearer ${token}`);
 
-    const TodosOfLoginUser = demoTodos.filter(demoTodo => {
+    const todosOfLoginUser = demoTodos.filter(demoTodo => {
       return demoTodo.userId === signinUserID;
     });
 
     body.forEach((todo, index) => {
       assert.equal(typeof todo.id, "number");
-      assert.equal(todo.title, TodosOfLoginUser[index].title);
-      assert.equal(todo.desc, TodosOfLoginUser[index].desc);
+      assert.equal(todo.title, todosOfLoginUser[index].title);
+      assert.equal(todo.desc, todosOfLoginUser[index].desc);
       assert.equal(todo.completed, false);
-      assert.equal(todo.orderNumber, TodosOfLoginUser[index].orderNumber);
-      assert.equal(todo.userId, TodosOfLoginUser[index].userId);
+      assert.equal(todo.orderNumber, todosOfLoginUser[index].orderNumber);
+      assert.equal(todo.userId, todosOfLoginUser[index].userId);
       assert.equal(statusCode, 200);
     });
   });
