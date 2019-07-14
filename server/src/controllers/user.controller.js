@@ -7,8 +7,6 @@ const userController = {
   async signup(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      // insert into users(name, email, pasword)
-      // values(req.body.name, req.body.email, req.body.password);
       const user = await User.create(
         {
           name: req.body.name,
@@ -82,6 +80,7 @@ const userController = {
         !User.isAdmin(req.decoded.UserRoleId) &&
         Number(req.params.id) !== req.decoded.id
       ) {
+        // 400 Bad Request
         throw boom.badRequest("A bad request was sent.");
       }
 
@@ -95,6 +94,7 @@ const userController = {
       await transaction.rollback();
 
       if (error instanceof TypeError) {
+        // 500 Internal Server Error
         error = boom.boomify(error);
         error.output.payload.message =
           "Sorry, our service is temporaily unavailable.";
