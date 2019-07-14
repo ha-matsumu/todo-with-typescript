@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const boom = require("boom");
 require("dotenv").config();
 const { User, sequelize } = require("../models");
-const isAdmin = require("../middlewares/adminHelper");
 
 const userController = {
   async signup(req, res, next) {
