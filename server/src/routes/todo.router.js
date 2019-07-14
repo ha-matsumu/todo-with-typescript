@@ -6,7 +6,7 @@ const router = express.Router();
 router
   .route("/")
   .get(todoController.getTodos)
-  .post(todoController.postTodos);
+  .post(todoController.postTodo);
   
 // (PUT:更新 DELETE:論理削除)
 router
