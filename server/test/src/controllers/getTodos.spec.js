@@ -4,7 +4,7 @@ const { User, Todo, sequelize } = require("../../../src/models");
 const authHelper = require("../../helper/authHelper");
 const requestHelper = require("../../helper/requestHelper");
 
-describe("POST /todo", () => {
+describe("GET /todos", () => {
   const demoUsers = [];
   const demoTodos = [];
 
