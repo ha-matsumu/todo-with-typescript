@@ -4,7 +4,7 @@ const { User, sequelize } = require("../../../src/models");
 const authHelper = require("../../helper/authHelper");
 const requestHelper = require("../../helper/requestHelper");
 
-describe("POST /todos", () => {
+describe("POST /todo", () => {
   after(async () => {
     await sequelize.truncate();
   });
