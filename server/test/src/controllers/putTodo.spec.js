@@ -1,6 +1,6 @@
 const assert = require("assert");
 const faker = require("faker");
-const { User, sequelize } = require("../../../src/models");
+const { sequelize } = require("../../../src/models");
 const authHelper = require("../../helper/authHelper");
 const todoHelper = require("../../helper/todoHelper");
 const requestHelper = require("../../helper/requestHelper");
