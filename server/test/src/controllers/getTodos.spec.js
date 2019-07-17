@@ -5,7 +5,7 @@ const authHelper = require("../../helper/authHelper");
 const todoHelper = require("../../helper/todoHelper");
 const requestHelper = require("../../helper/requestHelper");
 
-describe("GET /todo", () => {
+describe("GET /todos", () => {
   const demoUsers = [];
   const signedUpUsers = [];
   const demoTodos = [];
