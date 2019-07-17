@@ -93,7 +93,7 @@ describe("PUT /todos/:id", () => {
       .set("authorization", `Bearer ${token}`);
 
     assert.equal(body.error, "Forbidden");
-    assert.equal(body.message, "You dont't have permission to access.");
+    assert.equal(body.message, "You don't have permission to access.");
     assert.equal(statusCode, 403);
   });
 

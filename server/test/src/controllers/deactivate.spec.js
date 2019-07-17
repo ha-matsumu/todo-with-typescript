@@ -75,11 +75,11 @@ describe("Delete /users/:id", () => {
 
     const signinUserID = await User.max("id");
     const { body, statusCode } = await requestHelper
-      .requestAPI("delete", `/users/${signinUserID}`, 400)
+      .requestAPI("delete", `/users/${signinUserID}`, 403)
       .set("authorization", `Bearer ${token}`);
 
     assert.equal(body.error, "Forbidden");
-    assert.equal(body.message, "You dont't have permission to access.");
+    assert.equal(body.message, "You don't have permission to access.");
     assert.equal(statusCode, 403);
   });
 
