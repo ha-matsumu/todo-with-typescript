@@ -68,8 +68,8 @@ const todoContrller = {
         !User.isAdmin(req.decoded.UserRoleId) &&
         todo.userId !== req.decoded.id
       ) {
-        // 400 Bad Request
-        return next(boom.badRequest("A bad request was sent."));
+        // 403 Forbidden
+        return next(boom.forbidden("You don't have permission to access."));
       }
 
       await todo.update(
