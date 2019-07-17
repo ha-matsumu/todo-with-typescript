@@ -60,8 +60,8 @@ const todoContrller = {
     try {
       const todo = await Todo.findByPk(req.params.id);
       if (!todo) {
-        // 400 Bad Request
-        return next(boom.badRequest("Todo not found."));
+        // 404 Not Found
+        return next(boom.notFound("Todo could not be found."));
       }
 
       if (

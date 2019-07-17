@@ -84,18 +84,6 @@ describe("PUT /todos/:id", () => {
     assert.equal(statusCode, 200);
   });
 
-  it("Todoの更新機能の確認(Todoが見つからなかった場合) 400", async () => {
-    const token = await authHelper.getToken(demoUsers[1]);
-
-    const { body, statusCode } = await requestHelper
-      .requestAPI("put", `/todos/0`, 400)
-      .set("authorization", `Bearer ${token}`);
-
-    assert.equal(body.error, "Bad Request");
-    assert.equal(body.message, "Todo not found.");
-    assert.equal(statusCode, 400);
-  });
-
   it("Todoの更新機能の確認(一般ユーザーで他のユーザーのTodoを更新しようとした場合) 400", async () => {
     const token = await authHelper.getToken(demoUsers[1]);
     const createdTodo = await todoHelper.createTodo(signedUpUsers[0].id);
@@ -119,7 +107,19 @@ describe("PUT /todos/:id", () => {
     assert.equal(statusCode, 403);
   });
 
-  it("Todoの更新機能の確認 404", async () => {
+  it("Todoの更新機能の確認(Todoが見つからなかった場合) 404", async () => {
+    const token = await authHelper.getToken(demoUsers[1]);
+
+    const { body, statusCode } = await requestHelper
+      .requestAPI("put", `/todos/0`, 404)
+      .set("authorization", `Bearer ${token}`);
+
+    assert.equal(body.error, "Not Found");
+    assert.equal(body.message, "Todo could not be found.");
+    assert.equal(statusCode, 404);
+  });
+
+  it("Todoの更新機能の確認(URLの指定間違いの場合) 404", async () => {
     const { body, statusCode } = await requestHelper
       .requestAPI("put", "/todo/1", 404)
       .set("Accept", "application/json");
