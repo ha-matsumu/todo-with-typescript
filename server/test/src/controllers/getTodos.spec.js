@@ -1,11 +1,13 @@
 const assert = require("assert");
 const faker = require("faker");
-const { User, Todo, sequelize } = require("../../../src/models");
+const { sequelize } = require("../../../src/models");
 const authHelper = require("../../helper/authHelper");
+const todoHelper = require("../../helper/todoHelper");
 const requestHelper = require("../../helper/requestHelper");
 
 describe("GET /todos", () => {
   const demoUsers = [];
+  const signedUpUsers = [];
   const demoTodos = [];
 
   before(async () => {
@@ -17,23 +19,11 @@ describe("GET /todos", () => {
         password: faker.internet.password(),
         userRoleId: i + 1
       });
-      await authHelper.signup(demoUsers[i]);
+      signedUpUsers.push(await authHelper.signup(demoUsers[i]));
     }
-    const maxUserId = await User.max("id");
-    const demoUserId = [maxUserId - 1, maxUserId];
-
     for (let i = 0; i < 20; i++) {
-      demoTodos.push({
-        title: faker.name.title(),
-        desc: faker.lorem.sentences(),
-        orderNumber: i + 1,
-        userId: demoUserId[Math.floor(Math.random() * 2)]
-      });
+      demoTodos.push(await todoHelper.createTodo(signedUpUsers[i % 2].id));
     }
-    const promises = demoTodos.map(demoTodo => {
-      Todo.create(demoTodo);
-    });
-    await Promise.all(promises);
   });
 
   after(async () => {
@@ -41,13 +31,15 @@ describe("GET /todos", () => {
   });
 
   it("Todoの取得機能の確認(管理者の場合) 200", async () => {
-    const token = await authHelper.getToken(demoUsers[0]);
+    demoTodos.sort((todo1, todo2) => {
+      return todo1.orderNumber < todo2.orderNumber ? -1 : 1;
+    });
 
+    const token = await authHelper.getToken(demoUsers[0]);
     const { body, statusCode } = await requestHelper
       .requestAPI("get", "/todos", 200)
       .set("authorization", `Bearer ${token}`);
 
-    assert.equal(body.length, demoTodos.length);
     body.forEach((todo, index) => {
       assert.equal(typeof todo.id, "number");
       assert.equal(todo.title, demoTodos[index].title);
@@ -61,17 +53,15 @@ describe("GET /todos", () => {
 
   it("Todoの取得機能の確認(一般ユーザーの場合) 200", async () => {
     const token = await authHelper.getToken(demoUsers[1]);
-    const signinUserID = await User.max("id");
 
     const { body, statusCode } = await requestHelper
       .requestAPI("get", "/todos", 200)
       .set("authorization", `Bearer ${token}`);
 
     const todosOfLoginUser = demoTodos.filter(demoTodo => {
-      return demoTodo.userId === signinUserID;
+      return demoTodo.userId === signedUpUsers[1].id;
     });
 
-    assert.equal(body.length, todosOfLoginUser.length);
     body.forEach((todo, index) => {
       assert.equal(typeof todo.id, "number");
       assert.equal(todo.title, todosOfLoginUser[index].title);

@@ -50,7 +50,17 @@ describe("Delete /users/:id", () => {
     assert.equal(statusCode, 200);
   });
 
-  it("退会機能の確認 400", async () => {
+  it("退会機能の確認 401", async () => {
+    const { body, statusCode } = await requestHelper
+      .requestAPI("delete", "/users/1", 401)
+      .set("authorization", "Bearer token");
+
+    assert.equal(body.error, "Unauthorized");
+    assert.equal(body.message, "Invalid token.");
+    assert.equal(statusCode, 401);
+  });
+
+  it("退会機能の確認(一般ユーザーで他のユーザーを退会させようとした場合) 403", async () => {
     const demoUsers = [];
     for (let i = 0; i < 2; i++) {
       demoUsers.push({
@@ -65,25 +75,15 @@ describe("Delete /users/:id", () => {
 
     const signinUserID = await User.max("id");
     const { body, statusCode } = await requestHelper
-      .requestAPI("delete", `/users/${signinUserID}`, 400)
+      .requestAPI("delete", `/users/${signinUserID}`, 403)
       .set("authorization", `Bearer ${token}`);
 
-    assert.equal(body.error, "Bad Request");
-    assert.equal(body.message, "A bad request was sent.");
-    assert.equal(statusCode, 400);
+    assert.equal(body.error, "Forbidden");
+    assert.equal(body.message, "You don't have permission to access.");
+    assert.equal(statusCode, 403);
   });
 
-  it("退会機能の確認 401", async () => {
-    const { body, statusCode } = await requestHelper
-      .requestAPI("delete", "/users/1", 401)
-      .set("authorization", "Bearer token");
-
-    assert.equal(body.error, "Unauthorized");
-    assert.equal(body.message, "Invalid token.");
-    assert.equal(statusCode, 401);
-  });
-
-  it("退会機能の確認 403", async () => {
+  it("退会機能の確認(ログインせずに退会しようとした場合) 403", async () => {
     const { body, statusCode } = await requestHelper
       .requestAPI("delete", "/users/1", 403)
       .set("Accept", "application/json");

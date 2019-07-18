@@ -80,8 +80,8 @@ const userController = {
         !User.isAdmin(req.decoded.UserRoleId) &&
         Number(req.params.id) !== req.decoded.id
       ) {
-        // 400 Bad Request
-        throw boom.badRequest("A bad request was sent.");
+        // 403 Forbidden
+        return next(boom.forbidden("You don't have permission to access."));
       }
 
       const user = await User.findByPk(req.params.id);

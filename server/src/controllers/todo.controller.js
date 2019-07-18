@@ -54,10 +54,45 @@ const todoContrller = {
       next(error);
     }
   },
-  putTodo(req, res) {
-    const id = req.params.id;
-    const data = "update todo of id " + id + " in DB";
-    res.status(200).send(data);
+
+  async putTodo(req, res, next) {
+    const transaction = await sequelize.transaction();
+    try {
+      const todo = await Todo.findByPk(req.params.id);
+      if (!todo) {
+        // 404 Not Found
+        return next(boom.notFound("Todo could not be found."));
+      }
+
+      if (
+        !User.isAdmin(req.decoded.UserRoleId) &&
+        todo.userId !== req.decoded.id
+      ) {
+        // 403 Forbidden
+        return next(boom.forbidden("You don't have permission to access."));
+      }
+
+      await todo.update(
+        {
+          title: req.body.title,
+          desc: req.body.desc,
+          completed: req.body.completed,
+          orderNumber: req.body.orderNumber
+        },
+        { transaction }
+      );
+      await transaction.commit();
+      res.status(200).json(todo);
+    } catch (error) {
+      await transaction.rollback();
+
+      // 500 Internal Server Error
+      error = boom.boomify(error);
+      error.output.payload.message =
+        "Sorry, our service is temporaily unavailable.";
+
+      next(error);
+    }
   },
   deleteTodo(req, res) {
     const id = req.params.id;
