@@ -58,10 +58,10 @@ const todoContrller = {
   async putTodo(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const todo = await Todo.findByPk(req.params.id);
+      const todo = await Todo.findByPk(req.params.id, { transaction });
       if (!todo) {
         // 404 Not Found
-        return next(boom.notFound("Todo could not be found."));
+        throw boom.notFound("Todo could not be found.");
       }
 
       if (
@@ -69,7 +69,7 @@ const todoContrller = {
         todo.userId !== req.decoded.id
       ) {
         // 403 Forbidden
-        return next(boom.forbidden("You don't have permission to access."));
+        throw boom.forbidden("You don't have permission to access.");
       }
 
       await todo.update(
@@ -81,23 +81,62 @@ const todoContrller = {
         },
         { transaction }
       );
+
+      await transaction.commit();
+
+      res.status(200).json(todo);
+    } catch (error) {
+      await transaction.rollback();
+
+      let _error;
+      if (error.isBoom) {
+        _error = error;
+      } else {
+        // 500 Internal Server Error
+        _error = boom.boomify(error);
+        _error.output.payload.message =
+          "Sorry, our service is temporaily unavailable.";
+      }
+
+      next(_error);
+    }
+  },
+
+  async deleteTodo(req, res, next) {
+    const transaction = await sequelize.transaction();
+    try {
+      const todo = await Todo.findByPk(req.params.id, { transaction });
+      if (!todo) {
+        // 404 Not Found
+        throw boom.notFound("Todo could not be found.");
+      }
+
+      if (
+        !User.isAdmin(req.decoded.UserRoleId) &&
+        todo.userId !== req.decoded.id
+      ) {
+        // 403 Forbidden
+        throw boom.forbidden("You don't have permission to access.");
+      }
+
+      await todo.destroy({ transaction });
       await transaction.commit();
       res.status(200).json(todo);
     } catch (error) {
       await transaction.rollback();
 
-      // 500 Internal Server Error
-      error = boom.boomify(error);
-      error.output.payload.message =
-        "Sorry, our service is temporaily unavailable.";
+      let _error;
+      if (error.isBoom) {
+        _error = error;
+      } else {
+        // 500 Internal Server Error
+        _error = boom.boomify(error);
+        _error.output.payload.message =
+          "Sorry, our service is temporaily unavailable.";
+      }
 
-      next(error);
+      next(_error);
     }
-  },
-  deleteTodo(req, res) {
-    const id = req.params.id;
-    const data = "delete todo of id " + id + " from DB";
-    res.status(200).send(data);
   }
 };
 
