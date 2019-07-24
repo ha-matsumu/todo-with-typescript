@@ -31,7 +31,7 @@ describe("GET /todos", () => {
       });
     }
     const promises = demoTodos.map(demoTodo => {
-      Todo.create(demoTodo);
+      return Todo.create(demoTodo);
     });
     await Promise.all(promises);
   });
