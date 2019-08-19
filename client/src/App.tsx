@@ -1,10 +1,12 @@
 import React from 'react';
+import SignIn from './components/auth/SignIn';
+import { UserProvider } from './store/contexts/userContext';
 
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <h1>App.tsx</h1>
-    </div>
+    <UserProvider>
+      <SignIn />
+    </UserProvider>
   );
 };
 
