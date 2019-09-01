@@ -20,6 +20,7 @@ const Navbar: React.FC<Props> = ({ clickDrawerToggleButton }: Props) => {
         </div>
         <div className="spacer" />
         <div className="navbar-navigation-items">
+          {/* TODO:ログイン状態により表示を切り替えるように修正する */}
           <SignOutLinks />
           <SignInLinks />
         </div>
