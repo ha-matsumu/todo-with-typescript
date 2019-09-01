@@ -3,7 +3,7 @@ import './Links.css';
 
 export interface Props {}
 
-const SignInLinks: React.FC<Props> = () => {
+const SignInLinks: React.SFC<Props> = () => {
   return (
     <ul>
       <li>

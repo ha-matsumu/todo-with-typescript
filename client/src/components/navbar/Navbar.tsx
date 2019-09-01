@@ -8,7 +8,7 @@ export interface Props {
   clickDrawerToggleButton: () => void;
 }
 
-const Navbar: React.FC<Props> = ({ clickDrawerToggleButton }: Props) => {
+const Navbar: React.SFC<Props> = ({ clickDrawerToggleButton }: Props) => {
   return (
     <header className="navbar">
       <nav className="navbar-navigation">

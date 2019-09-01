@@ -3,7 +3,7 @@ import './Links.css';
 
 export interface Props {}
 
-const SignOutLinks: React.FC<Props> = () => {
+const SignOutLinks: React.SFC<Props> = () => {
   return (
     <ul>
       <li>

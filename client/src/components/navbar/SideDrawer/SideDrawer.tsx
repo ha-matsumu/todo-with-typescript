@@ -6,7 +6,7 @@ export interface Props {
   hasShown: boolean;
 }
 
-const SideDrawer: React.FC<Props> = ({ hasShown }: Props) => {
+const SideDrawer: React.SFC<Props> = ({ hasShown }: Props) => {
   let drawerClasses = 'side-drawer';
   if (hasShown) {
     drawerClasses = 'side-drawer open';
