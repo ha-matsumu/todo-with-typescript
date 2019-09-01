@@ -1,9 +1,7 @@
 import React from 'react';
 import './Links.css';
 
-export interface Props {}
-
-const SignOutLinks: React.SFC<Props> = () => {
+const SignOutLinks: React.SFC = () => {
   return (
     <ul>
       <li>

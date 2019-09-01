@@ -1,9 +1,7 @@
 import React from 'react';
 import './Links.css';
 
-export interface Props {}
-
-const SignInLinks: React.SFC<Props> = () => {
+const SignInLinks: React.SFC = () => {
   return (
     <ul>
       <li>
