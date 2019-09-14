@@ -6,6 +6,7 @@ import Backdrop from './components/navbar/Backdrop/Backdrop';
 import SignIn from './components/auth/SignIn';
 import SignUp from './components/auth/SignUp';
 import TodoList from './components/todos/TodoList';
+import { UserProvider } from './store/contexts/userContext';
 
 const App: React.FC = () => {
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
@@ -30,7 +31,9 @@ const App: React.FC = () => {
       {backdrop}
       <main style={{ marginTop: '64px' }}>
         <Route exact path="/users/login" component={SignIn} />
-        <Route exact path="/users/" component={SignUp} />
+        <UserProvider>
+          <Route exact path="/users/" component={SignUp} />
+        </UserProvider>
         <Route exact path="/todos/" component={TodoList} />
       </main>
     </div>
