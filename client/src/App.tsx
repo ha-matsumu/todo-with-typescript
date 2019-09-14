@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { Route } from 'react-router-dom';
 import Navbar from './components/navbar/Navbar';
 import SideDrawer from './components/navbar/SideDrawer/SideDrawer';
 import Backdrop from './components/navbar/Backdrop/Backdrop';
+import SignIn from './components/auth/SignIn';
+import SignUp from './components/auth/SignUp';
+import TodoList from './components/todos/TodoList';
 
 const App: React.FC = () => {
   const [sideDrawerOpen, setSideDrawerOpen] = useState(false);
@@ -25,7 +29,9 @@ const App: React.FC = () => {
       <SideDrawer hasShown={sideDrawerOpen} />
       {backdrop}
       <main style={{ marginTop: '64px' }}>
-        <p>This is the page content!</p>
+        <Route exact path="/users/login" component={SignIn} />
+        <Route exact path="/users/" component={SignUp} />
+        <Route exact path="/todos/" component={TodoList} />
       </main>
     </div>
   );
