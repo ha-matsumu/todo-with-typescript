@@ -1,4 +1,4 @@
-import { Action, PayloadAction } from '../../types';
+import { Action, PayloadAction } from '../../../types';
 
 export type SignUpActionTypes =
   | Action<'SIGN_UP_REQUEST'>

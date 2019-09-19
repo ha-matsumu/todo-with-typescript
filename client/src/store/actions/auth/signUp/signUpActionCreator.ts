@@ -1,4 +1,4 @@
-import { SignUpActionTypes } from './userActionTypes';
+import { SignUpActionTypes } from './signUpActionTypes';
 
 export const signUpRequest = (): SignUpActionTypes => ({
   type: 'SIGN_UP_REQUEST',

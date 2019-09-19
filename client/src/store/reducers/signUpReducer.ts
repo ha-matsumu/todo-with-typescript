@@ -1,4 +1,4 @@
-import { SignUpActionTypes } from '../actions/auth/userActionTypes';
+import { SignUpActionTypes } from '../actions/auth/signUp/signUpActionTypes';
 
 export interface SignUpInitialState {
   signingUp: boolean;
@@ -12,7 +12,7 @@ export const initialState: SignUpInitialState = {
   error: false,
 };
 
-const userReducer = (state: SignUpInitialState, action: SignUpActionTypes): SignUpInitialState => {
+const signUpReducer = (state: SignUpInitialState, action: SignUpActionTypes): SignUpInitialState => {
   switch (action.type) {
     case 'SIGN_UP_REQUEST':
       return {
@@ -37,4 +37,4 @@ const userReducer = (state: SignUpInitialState, action: SignUpActionTypes): Sign
   }
 };
 
-export default userReducer;
+export default signUpReducer;
