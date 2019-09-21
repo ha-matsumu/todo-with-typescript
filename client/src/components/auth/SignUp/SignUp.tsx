@@ -22,11 +22,6 @@ const SignUp: React.FC = () => {
     password: '',
   });
 
-  // パスワード用の正規表現
-  // const passwordRegex = new RegExp(
-  //   /^(?=[A-Z\d]{0,99}[a-z])(?=[a-z\d]{0,99}[A-Z])(?=[a-zA-Z]{0,99}\d)[a-zA-Z\d]{8,100}$/
-  // );
-
   // 新規登録処理
   const signUpHandler = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
