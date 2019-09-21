@@ -15,7 +15,7 @@ const SignUp: React.FC = () => {
   const [name, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrros] = useState({
+  const [errors, setErrors] = useState({
     name: '',
     email: '',
     password: '',
@@ -85,7 +85,7 @@ const SignUp: React.FC = () => {
           break;
       }
     });
-    setErrros(valiedaedErrors);
+    setErrors(valiedaedErrors);
 
     Object.values(valiedaedErrors).forEach(value => {
       if (value !== '') {
