@@ -38,11 +38,12 @@ const SignUp: React.FC = () => {
     };
 
     // バリデーションエラーがある場合は、処理終了
-    if (validate(inputData)) return;
+    if (validate(inputData)) {
+      return;
+    }
 
     try {
       await signUpUser(inputData);
-
       window.location.href = '/users/login';
     } catch (error) {
       throw new Error(error);
@@ -60,31 +61,24 @@ const SignUp: React.FC = () => {
         case 'name':
           if (value.length <= 0) {
             valiedaedErrors.name = '名前は必須です。';
-            valid = true;
           } else {
             valiedaedErrors.name = '';
-            valid = false;
           }
           break;
         case 'email':
           if (value.length === 0) {
             valiedaedErrors.email = 'メールアドレスは必須です。';
-            valid = true;
           } else if (!emailRegex.test(value)) {
             valiedaedErrors.email = 'メールアドレスを入力してください。';
-            valid = true;
           } else {
             valiedaedErrors.email = '';
-            valid = false;
           }
           break;
         case 'password':
           if (!passwordRegex.test(value)) {
             valiedaedErrors.password = '半角英大文字小文字、数字を含む8文字以上で入力してください。';
-            valid = true;
           } else {
             valiedaedErrors.password = '';
-            valid = false;
           }
           break;
         default:
@@ -92,6 +86,12 @@ const SignUp: React.FC = () => {
       }
     });
     setErrros(valiedaedErrors);
+
+    Object.values(valiedaedErrors).forEach(value => {
+      if (value !== '') {
+        valid = true;
+      }
+    });
     return valid;
   };
 
