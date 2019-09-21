@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useContext } from 'react';
+import validator from 'validator';
 import { SignUpContext } from '../../../store/contexts/SignUpContext';
 import './SignUp.css';
 
@@ -21,12 +22,10 @@ const SignUp: React.FC = () => {
     password: '',
   });
 
-  // メールアドレス用の正規表現
-  const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/);
   // パスワード用の正規表現
-  const passwordRegex = new RegExp(
-    /^(?=[A-Z\d]{0,99}[a-z])(?=[a-z\d]{0,99}[A-Z])(?=[a-zA-Z]{0,99}\d)[a-zA-Z\d]{8,100}$/
-  );
+  // const passwordRegex = new RegExp(
+  //   /^(?=[A-Z\d]{0,99}[a-z])(?=[a-z\d]{0,99}[A-Z])(?=[a-zA-Z]{0,99}\d)[a-zA-Z\d]{8,100}$/
+  // );
 
   // 新規登録処理
   const signUpHandler = async (e: { preventDefault: () => void }) => {
@@ -59,24 +58,30 @@ const SignUp: React.FC = () => {
       const value = inputData[key];
       switch (key) {
         case 'name':
-          if (value.length <= 0) {
+          if (validator.isEmpty(value)) {
             valiedaedErrors.name = '名前は必須です。';
           } else {
             valiedaedErrors.name = '';
           }
           break;
         case 'email':
-          if (value.length === 0) {
+          if (validator.isEmpty(value)) {
             valiedaedErrors.email = 'メールアドレスは必須です。';
-          } else if (!emailRegex.test(value)) {
+          } else if (!validator.isEmail(value)) {
             valiedaedErrors.email = 'メールアドレスを入力してください。';
           } else {
             valiedaedErrors.email = '';
           }
           break;
         case 'password':
-          if (!passwordRegex.test(value)) {
-            valiedaedErrors.password = '半角英大文字小文字、数字を含む8文字以上で入力してください。';
+          if (!validator.isLength(value, { min: 8 })) {
+            valiedaedErrors.password = '8文字以上で入力してください。';
+          } else if (validator.isFullWidth(value) || validator.isAlpha(value) || validator.isNumeric(value)) {
+            valiedaedErrors.password = '半角英字、数字を含むパスワードを入力ください。';
+          } else if (validator.isUppercase(value)) {
+            valiedaedErrors.password = '半角英小文字を含めてください。';
+          } else if (validator.isLowercase(value)) {
+            valiedaedErrors.password = '半角英大文字を含めてください。';
           } else {
             valiedaedErrors.password = '';
           }
