@@ -3,6 +3,7 @@ import axios from 'axios';
 import userReducer, { SignUpInitialState, initialState } from '../reducers/signUpReducer';
 import { SignUpActionTypes } from '../actions/auth/signUp/signUpActionTypes';
 import { signUpFailuer, signUpRequest, signUpSuccess } from '../actions/auth/signUp/signUpActionCreator';
+import { userConstants } from '../../constants/user';
 
 interface Props {
   children: React.ReactNode;
@@ -29,7 +30,7 @@ const SignUpProvider: React.SFC<Props> = ({ children }: Props) => {
       dispatch(signUpRequest());
       await axios.post('/users/', {
         ...inputData,
-        userRoleId: 2,
+        userRoleId: userConstants.USER_ROLE.NORMAL,
       });
       dispatch(signUpSuccess());
     } catch (error) {
