@@ -37,7 +37,7 @@ const SignUp: React.FC = () => {
     };
 
     // バリデーションエラーがある場合は、処理終了
-    if (validate(inputData)) {
+    if (!validate(inputData)) {
       return;
     }
 
@@ -52,7 +52,7 @@ const SignUp: React.FC = () => {
   // バリデーションチェック
   const validate = (inputData: InputData): boolean => {
     const valiedaedErrors = { ...errors };
-    let valid = false;
+    let isValid = true;
 
     (Object.keys(inputData) as (keyof InputData)[]).forEach(key => {
       const value = inputData[key];
@@ -94,10 +94,10 @@ const SignUp: React.FC = () => {
 
     Object.values(valiedaedErrors).forEach(value => {
       if (value !== '') {
-        valid = true;
+        isValid = false;
       }
     });
-    return valid;
+    return isValid;
   };
 
   return (
