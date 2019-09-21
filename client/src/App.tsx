@@ -4,7 +4,7 @@ import Navbar from './components/navbar/Navbar';
 import SideDrawer from './components/navbar/SideDrawer/SideDrawer';
 import Backdrop from './components/navbar/Backdrop/Backdrop';
 import SignIn from './components/auth/SignIn';
-import SignUp from './components/auth/SignUp';
+import SignUp from './components/auth/SignUp/SignUp';
 import TodoList from './components/todos/TodoList';
 import { SignUpProvider } from './store/contexts/SignUpContext';
 

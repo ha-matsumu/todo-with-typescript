@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useContext } from 'react';
-import { SignUpContext } from '../../store/contexts/SignUpContext';
+import { SignUpContext } from '../../../store/contexts/SignUpContext';
 import './SignUp.css';
 
 interface InputData {
@@ -42,13 +42,13 @@ const SignUp: React.FC = () => {
 
     try {
       await signUpUser(inputData);
-      // TODO: 後で、ページ遷移処理追加
+
+      window.location.href = '/users/login';
     } catch (error) {
       throw new Error(error);
     }
   };
 
-  // TODO:後でany型修正
   // バリデーションチェック
   const validate = (inputData: InputData): boolean => {
     const valiedaedErrors = { ...errors };
@@ -100,8 +100,8 @@ const SignUp: React.FC = () => {
       <div className="form-wrapper">
         <h2>アカウントを新規作成</h2>
         <form onSubmit={signUpHandler} noValidate>
-          <div className="userName">
-            <label htmlFor="userName">
+          <div className="name">
+            <label htmlFor="name">
               名前
               <span>*</span>
             </label>
@@ -109,7 +109,7 @@ const SignUp: React.FC = () => {
               type="text"
               className={errors.name ? 'error' : undefined}
               placeholder="例 : 山田太郎"
-              name="userName"
+              name="name"
               onChange={e => setUserName(e.target.value)}
               required
             />
