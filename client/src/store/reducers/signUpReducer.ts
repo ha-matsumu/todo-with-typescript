@@ -12,7 +12,7 @@ export const initialState: SignUpInitialState = {
   error: false,
 };
 
-const signUpReducer = (state: SignUpInitialState, action: SignUpActionTypes): SignUpInitialState => {
+const signUpReducer = (state: SignUpInitialState = initialState, action: SignUpActionTypes): SignUpInitialState => {
   switch (action.type) {
     case 'SIGN_UP_REQUEST':
       return {
